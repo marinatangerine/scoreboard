@@ -1,4 +1,5 @@
-﻿using MSL.ScoreBoard.Data.Extensions;
+﻿using MSL.ScoreBoard.Data.Exceptions;
+using MSL.ScoreBoard.Data.Extensions;
 using System.Collections.Concurrent;
 
 namespace MSL.ScoreBoard.Data.Entities
@@ -68,19 +69,19 @@ namespace MSL.ScoreBoard.Data.Entities
             var matchKey = match.GetHash();
             if (_matches.ContainsKey(matchKey))
             {
-                throw new Exception("Match already exists");
+                throw new MatchAlreadyStartedException(match.HomeContender.Name, match.AwayContender.Name);
             }
 
             //check home contender not in any match
             if (_contenders.ContainsKey(match.HomeContender.Name.GetHashCode()))
             {
-                throw new Exception("Invalid contender");
+                throw new InvalidContenderException(match.HomeContender.Name);
             }
 
             //check away contender not in any match
             if (_contenders.ContainsKey(match.AwayContender.Name.GetHashCode()))
             {
-                throw new Exception("Invalid contender");
+                throw new InvalidContenderException(match.AwayContender.Name);
             }
         }
 
@@ -93,7 +94,7 @@ namespace MSL.ScoreBoard.Data.Entities
             var matchKey = match.GetHash();
             if (!_matches.ContainsKey(matchKey))
             {
-                throw new Exception("Match not found");
+                throw new MatchNotFoundException();
             }
         }
 
@@ -105,7 +106,7 @@ namespace MSL.ScoreBoard.Data.Entities
             var matchKey = match.GetHash();
             if (!_matches.ContainsKey(matchKey))
             {
-                throw new Exception("Match not found");
+                throw new MatchNotFoundException();
             }
         }
 
@@ -114,13 +115,13 @@ namespace MSL.ScoreBoard.Data.Entities
             //check valid name for contender 1
             if (string.IsNullOrWhiteSpace(match.HomeContender.Name))
             {
-                throw new ArgumentNullException(match.HomeContender.Name);
+                throw new InvalidContenderException(match.HomeContender.Name);
             }
 
             //check valid name for contender 2
             if (string.IsNullOrWhiteSpace(match.AwayContender.Name))
             {
-                throw new ArgumentNullException(match.AwayContender.Name);
+                throw new InvalidContenderException(match.AwayContender.Name);
             }
         }
 
@@ -129,7 +130,7 @@ namespace MSL.ScoreBoard.Data.Entities
             //check valid score
             if (match.HomeContender.Score < 0 || match.AwayContender.Score < 0)
             {
-                throw new Exception("Score not valid");
+                throw new InvalidScoreException(match.HomeContender.Score, match.AwayContender.Score);
             }
         }
         #endregion Private

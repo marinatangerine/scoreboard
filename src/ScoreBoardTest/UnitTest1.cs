@@ -1,4 +1,5 @@
 using MSL.ScoreBoard.Data.Entities;
+using MSL.ScoreBoard.Data.Exceptions;
 
 namespace ScoreBoardTest
 {
@@ -30,7 +31,7 @@ namespace ScoreBoardTest
             var team2 = "";
 
             //Act & Asset
-            Assert.ThrowsException<ArgumentNullException>(() => scoreboard.Match_Start(team1, team2));
+            Assert.ThrowsException<InvalidContenderException>(() => scoreboard.Match_Start(team1, team2));
         }
 
         [TestMethod]
@@ -45,7 +46,7 @@ namespace ScoreBoardTest
             scoreboard.Match_Start(team1, team2);
 
             //Asset
-            Assert.ThrowsException<Exception>(() => scoreboard.Match_Start(team1, team2));
+            Assert.ThrowsException<MatchAlreadyStartedException>(() => scoreboard.Match_Start(team1, team2));
         }
 
         [TestMethod]
@@ -61,10 +62,10 @@ namespace ScoreBoardTest
             scoreboard.Match_Start(team1, team2);
 
             //Asset
-            Assert.ThrowsException<Exception>(() => scoreboard.Match_Start(team1, team3));
-            Assert.ThrowsException<Exception>(() => scoreboard.Match_Start(team3, team1));
-            Assert.ThrowsException<Exception>(() => scoreboard.Match_Start(team2, team3));
-            Assert.ThrowsException<Exception>(() => scoreboard.Match_Start(team3, team2));
+            Assert.ThrowsException<InvalidContenderException>(() => scoreboard.Match_Start(team1, team3));
+            Assert.ThrowsException<InvalidContenderException>(() => scoreboard.Match_Start(team3, team1));
+            Assert.ThrowsException<InvalidContenderException>(() => scoreboard.Match_Start(team2, team3));
+            Assert.ThrowsException<InvalidContenderException>(() => scoreboard.Match_Start(team3, team2));
         }
 
 
@@ -103,7 +104,7 @@ namespace ScoreBoardTest
             scoreboard.Match_Start(team1, team2);
 
             //Asset
-            Assert.ThrowsException<ArgumentNullException>(() => scoreboard.Match_End(team1, string.Empty));
+            Assert.ThrowsException<InvalidContenderException>(() => scoreboard.Match_End(team1, string.Empty));
         }
 
         [TestMethod]
@@ -143,7 +144,7 @@ namespace ScoreBoardTest
             scoreboard.Match_Update(team1, team2, scoreTeam1, scoreTeam2);
 
             //Asset
-            Assert.ThrowsException<Exception>(() => scoreboard.Match_Update(team3, team4, scoreTeam1, scoreTeam2));
+            Assert.ThrowsException<MatchNotFoundException>(() => scoreboard.Match_Update(team3, team4, scoreTeam1, scoreTeam2));
         }
 
         [TestMethod]
@@ -160,7 +161,7 @@ namespace ScoreBoardTest
             scoreboard.Match_Start(team1, team2);
 
             //Asset
-            Assert.ThrowsException<Exception>(() => scoreboard.Match_Update(team1, team1, scoreTeam1, scoreTeam2));
+            Assert.ThrowsException<InvalidScoreException>(() => scoreboard.Match_Update(team1, team1, scoreTeam1, scoreTeam2));
         }
 
         [TestMethod]
