@@ -8,5 +8,7 @@
         public ContenderScore(string name) => Name = name;
 
         public void Score_Update(int? score) => Score = score ?? 0;
+
+        public override string ToString() => $"{Name} {Score}";
     }
 }

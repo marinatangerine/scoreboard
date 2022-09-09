@@ -2,6 +2,7 @@
 1. [General Info](#general-info)
 2. [Technologies](#technologies)
 3. [Assumptions](#assumptions)
+3. [Sample App](#sampleapp)
 
 ### General Info
 ***
@@ -20,3 +21,7 @@ Operations:
 ***
 * When updating a match, a team's score has not been validated if it is higher than current one, because goals can be disallowed, data can arrive with delay, etc.
 * When adding or updating a match, the moment is updated inside the match class, to obtain the most recently updated.
+
+## Sample App
+***
+Added a simple console app to show incoming data flow.

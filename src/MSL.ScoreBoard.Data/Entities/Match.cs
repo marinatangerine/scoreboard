@@ -19,5 +19,7 @@
             AwayContender.Score_Update(awayScore);
             return this;
         }
+
+        public override string ToString() => $"{HomeContender} - {AwayContender}";
     }
 }
