@@ -22,6 +22,53 @@ namespace ScoreBoardTest
         }
 
         [TestMethod]
+        public void Match_IncompleteStart()
+        {
+            var scoreboard = new Scoreboard();
+            // Arrange
+            var team1 = "Mexico";
+            var team2 = "";
+
+            //Act & Asset
+            Assert.ThrowsException<ArgumentNullException>(() => scoreboard.Match_Start(team1, team2));
+        }
+
+        [TestMethod]
+        public void Match_CreateExisting()
+        {
+            var scoreboard = new Scoreboard();
+            // Arrange
+            var team1 = "Mexico";
+            var team2 = "Canada";
+
+            //Act
+            scoreboard.Match_Start(team1, team2);
+
+            //Asset
+            Assert.ThrowsException<Exception>(() => scoreboard.Match_Start(team1, team2));
+        }
+
+        [TestMethod]
+        public void Match_CreateExistingContender()
+        {
+            var scoreboard = new Scoreboard();
+            // Arrange
+            var team1 = "Mexico";
+            var team2 = "Canada";
+            var team3 = "Spain";
+
+            //Act
+            scoreboard.Match_Start(team1, team2);
+
+            //Asset
+            Assert.ThrowsException<Exception>(() => scoreboard.Match_Start(team1, team3));
+            Assert.ThrowsException<Exception>(() => scoreboard.Match_Start(team3, team1));
+            Assert.ThrowsException<Exception>(() => scoreboard.Match_Start(team2, team3));
+            Assert.ThrowsException<Exception>(() => scoreboard.Match_Start(team3, team2));
+        }
+
+
+        [TestMethod]
         public void Match_End()
         {
             var scoreboard = new Scoreboard();
@@ -45,6 +92,21 @@ namespace ScoreBoardTest
         }
 
         [TestMethod]
+        public void Match_IncompleteEnd()
+        {
+            var scoreboard = new Scoreboard();
+            // Arrange
+            var team1 = "Mexico";
+            var team2 = "Canada";
+
+            //Act
+            scoreboard.Match_Start(team1, team2);
+
+            //Asset
+            Assert.ThrowsException<ArgumentNullException>(() => scoreboard.Match_End(team1, string.Empty));
+        }
+
+        [TestMethod]
         public void Match_Update()
         {
             var scoreboard = new Scoreboard();
@@ -62,6 +124,43 @@ namespace ScoreBoardTest
             var matches = scoreboard.ScoreBoard_List();
             var result = matches.Any(q => q.HomeContender.Name.Equals(team1) && q.AwayContender.Name.Equals(team2) && q.HomeContender.Score.Equals(0) && q.AwayContender.Score.Equals(1));
             Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void Match_UpdateNonExisting()
+        {
+            var scoreboard = new Scoreboard();
+            // Arrange
+            var team1 = "Mexico";
+            var team2 = "Canada";
+            var scoreTeam1 = 0;
+            var scoreTeam2 = 1;
+            var team3 = "Spain";
+            var team4 = "Brazil";
+
+            //Act
+            scoreboard.Match_Start(team1, team2);
+            scoreboard.Match_Update(team1, team2, scoreTeam1, scoreTeam2);
+
+            //Asset
+            Assert.ThrowsException<Exception>(() => scoreboard.Match_Update(team3, team4, scoreTeam1, scoreTeam2));
+        }
+
+        [TestMethod]
+        public void Invalid_Score()
+        {
+            var scoreboard = new Scoreboard();
+            //Arrange
+            var team1 = "Mexico";
+            var team2 = "Canada";
+            var scoreTeam1 = 0;
+            var scoreTeam2 = -1;
+
+            //Act
+            scoreboard.Match_Start(team1, team2);
+
+            //Asset
+            Assert.ThrowsException<Exception>(() => scoreboard.Match_Update(team1, team1, scoreTeam1, scoreTeam2));
         }
 
         [TestMethod]
